@@ -39,10 +39,10 @@ function Profile() {
         <>
             <View className="main" margin={'auto'} padding={'20px'} >
                 <Authenticator>
-                    {({ signOut, user }) => (
+                    {({ signOut }) => (
                         <View>
                             <Flex justifyContent={'space-between'}>
-                                <Heading level={6}> Hello, {user?.username} </Heading>
+                                <Heading level={6}> Hello!</Heading>
                                 <Button onClick={signOut}>Sign out</Button>
                             </Flex>
 
@@ -51,7 +51,7 @@ function Profile() {
 
                                     {saves?.length ? <View> <Heading level={4}>My saved expressions</Heading>
                                         {saves ? saves.map((save, i) => {
-                                            return <View key={i} marginTop='20px'> <Text>Number: {save.num} </Text>
+                                            return <View key={i} marginTop='20px'> <Text>Value: {save.num} </Text>
                                                 <Flex className="output" height={'90px'} border={'1px solid aliceblue'} justifyContent={'center'} alignItems={'center'}>
                                                     <MathJax>{`\\(${save.content}\\)`}</MathJax>
                                                 </Flex>

@@ -1,12 +1,11 @@
 import { useEffect, useState } from "react";
 import { generateClient } from 'aws-amplify/api';
 import './App.css'
-import { StepperField, View, Heading, Text, Flex, Button, SwitchField, Message, Loader } from '@aws-amplify/ui-react';
+import { StepperField, View, Heading, Text, Flex, Button, Message, Loader } from '@aws-amplify/ui-react';
 import OptionsCheckboxes from "./OptionsCheckboxes.tsx";
 import { convert } from "./genExpressions.ts"
 import { MathJax } from "better-react-mathjax";
 import { nanoid } from 'nanoid'
-// import { createSave, createShare } from './graphql/mutations';
 import { getCurrentUser } from 'aws-amplify/auth';
 import type { Schema } from "../amplify/data/resource";
 const client = generateClient<Schema>();
@@ -24,7 +23,6 @@ function Home() {
         geometricSeriesCheckBox: true,
     })
     const [inputNumber, setInputNumber] = useState(0)
-    const [displayStyle, setDisplayStyle] = useState(false)
     const [expression, setExpression] = useState("")
     const [userId, setUserId] = useState("")
     const [lastestShare, setLatestShare] = useState("")
@@ -71,6 +69,12 @@ function Home() {
         setLoading(false)
     }
 
+    async function generate() {
+        setLoading(true)
+        setExpression(convert(inputNumber, options))
+        setLoading(false)
+    }
+
     return (
 
         <View>
@@ -84,20 +88,18 @@ function Home() {
 
                 <StepperField max={1000} min={0} step={1} id="input" label="Enter an integer between 0 and 1000 inclusive" onStepChange={(newValue) => setInputNumber(newValue)} margin={'10px 0'} />
                 <Flex justifyContent={'space-between'} >
-                    <SwitchField isDisabled={false} label="Display Style" labelPosition="start" onChange={(e) => setDisplayStyle(e.target.checked)} />
-                    <Button onClick={() => setExpression(convert(inputNumber, options))} backgroundColor={'aliceblue'}>Generate</Button>
+                    <Button onClick={() => generate()} backgroundColor={'aliceblue'}>Generate</Button>
                 </Flex>
 
                 <OptionsCheckboxes options={options} setOptions={setOptions} />
 
                 <Flex className="output" height={'90px'} border={'1px solid aliceblue'} justifyContent={'center'} alignItems={'center'}>
-                    {loading ? <Loader size="large" /> : <MathJax inline={displayStyle} text="\\log">{`\\(${expression}\\)`}</MathJax>}
+                    {loading ? <Loader size="large" /> : <MathJax>{`\\(${expression}\\)`}</MathJax>}
 
                 </Flex>
                 {expression ?
                     <View>
                         <Flex margin={'10px 0'} justifyContent={'space-between'}>
-                            <Button>Download as PNG</Button>
                             {userId ? <Button onClick={() => save()}>Save</Button> : ''}
                             <Button onClick={() => share()} backgroundColor={'aliceblue'}>Share</Button>
                         </Flex> {lastestShare && !error ? <Message isDismissible={true} dismissLabel="Dismiss" colorTheme="success">

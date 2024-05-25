@@ -1,7 +1,7 @@
 import { useParams } from 'react-router-dom';
 import { useEffect, useState } from "react";
 import { generateClient } from "aws-amplify/data";
-import { View, Flex, Button, Loader } from '@aws-amplify/ui-react';
+import { View, Flex, Loader } from '@aws-amplify/ui-react';
 import { MathJax } from "better-react-mathjax";
 // import { getShare } from './graphql/queries';
 import type { Schema } from "../amplify/data/resource";
@@ -40,9 +40,6 @@ function Share() {
             {!error ? <View className="main" margin={'auto'} padding={'20px'}>
                 <Flex className="output" height={'90px'} border={'1px solid aliceblue'} justifyContent={'center'} alignItems={'center'}>
                     {loading ? <Loader size="large" /> : <MathJax>{`\\(${expression}\\)`}</MathJax>}
-                </Flex>
-                <Flex margin={'10px 0'} justifyContent={'space-between'}>
-                    <Button>Download as PNG</Button>
                 </Flex>
             </View> : <View> Could not find share </View>}
         </View>
