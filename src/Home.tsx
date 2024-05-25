@@ -30,7 +30,7 @@ function Home() {
     const [isSaved, setIsSaved] = useState(false)
     const [loading, setLoading] = useState(false)
 
-    function getUser() {
+    async function getUser() {
         getCurrentUser().then((value) => {
             setUserId(value?.userId)
         }, (reason) => {
@@ -68,7 +68,14 @@ function Home() {
         }
         setLoading(false)
     }
-
+    
+    async function generate() {
+        setLoading(true)
+        // Wait for a second for proper rendering
+        await new Promise(resolve => setTimeout(resolve, 500));
+        setExpression(convert(inputNumber, options))
+        setLoading(false)
+    }
 
     return (
 
@@ -83,7 +90,7 @@ function Home() {
 
                 <StepperField max={1000} min={0} step={1} id="input" label="Enter an integer between 0 and 1000 inclusive" onStepChange={(newValue) => setInputNumber(newValue)} margin={'10px 0'} />
                 <Flex justifyContent={'space-between'} >
-                    <Button onClick={() => setExpression(convert(inputNumber, options))} backgroundColor={'aliceblue'}>Generate</Button>
+                    <Button onClick={() => generate()} backgroundColor={'aliceblue'}>Generate</Button>
                 </Flex>
 
                 <OptionsCheckboxes options={options} setOptions={setOptions} />
