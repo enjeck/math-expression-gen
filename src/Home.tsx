@@ -69,11 +69,6 @@ function Home() {
         setLoading(false)
     }
 
-    async function generate() {
-        setLoading(true)
-        setExpression(convert(inputNumber, options))
-        setLoading(false)
-    }
 
     return (
 
@@ -88,13 +83,13 @@ function Home() {
 
                 <StepperField max={1000} min={0} step={1} id="input" label="Enter an integer between 0 and 1000 inclusive" onStepChange={(newValue) => setInputNumber(newValue)} margin={'10px 0'} />
                 <Flex justifyContent={'space-between'} >
-                    <Button onClick={() => generate()} backgroundColor={'aliceblue'}>Generate</Button>
+                    <Button onClick={() => setExpression(convert(inputNumber, options))} backgroundColor={'aliceblue'}>Generate</Button>
                 </Flex>
 
                 <OptionsCheckboxes options={options} setOptions={setOptions} />
 
                 <Flex className="output" height={'90px'} border={'1px solid aliceblue'} justifyContent={'center'} alignItems={'center'}>
-                    {loading ? <Loader size="large" /> : <MathJax>{`\\(${expression}\\)`}</MathJax>}
+                    {loading ? <Loader size="large" /> : <MathJax hideUntilTypeset="first">{`\\(${expression}\\)`}</MathJax>}
 
                 </Flex>
                 {expression ?
@@ -102,7 +97,7 @@ function Home() {
                         <Flex margin={'10px 0'} justifyContent={'space-between'}>
                             {userId ? <Button onClick={() => save()}>Save</Button> : ''}
                             <Button onClick={() => share()} backgroundColor={'aliceblue'}>Share</Button>
-                        </Flex> {lastestShare && !error ? <Message isDismissible={true} dismissLabel="Dismiss" colorTheme="success">
+                        </Flex> {lastestShare && !error ? <Message isDismissible={false} dismissLabel="Dismiss" colorTheme="success">
                             <Heading level={5}> Share URL</Heading>
                             <Text >{lastestShare}</Text> </Message> : ''}
 
